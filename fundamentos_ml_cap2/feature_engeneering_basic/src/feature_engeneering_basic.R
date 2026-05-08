@@ -84,4 +84,24 @@ View(dataset_bank_dummyes)
 
 
 ## Combinação de recursos (atributos)
-##
+## Vamos combinar recursos (atributos) para visualizar o relacionamento
+
+dados %>%
+  group_by(job, marital) %>%
+  summarise(n = n())
+
+
+# Criando uma matrix (seria necessário para aplicar testes de hipótese - como chi-quadrado)
+table(dados$job, dados$marital)
+
+# Visualizando
+dados %>%
+  group_by(job, marital) %>%
+  summarise(n = n()) %>% ggplot() + geom_bar(aes(y = n, x = job, fill = marital), # camada estética - coordenada dos dados
+                                             stat = "identity",
+                                             position = "dodge"
+                                             )
+
+# Codigicando variáveis combinadas
+dmy <- dummyVars(data = dados, formula = " ~ job:marital")
+predict(dmy, dados)
